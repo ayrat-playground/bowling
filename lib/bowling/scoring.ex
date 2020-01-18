@@ -58,12 +58,14 @@ defmodule Bowling.Scoring do
 
   defp validate_frame([], 1, _value), do: :ok
 
+  defp validate_frame([], _, _value), do: {:error, :invalid_frame}
+
   defp validate_frame(frames, frame_number, value) do
     last_frame = List.last(frames)
 
     cond do
-      last_frame == frame_number && eligible_for_current_frame?(last_frame, frame_number, value) -> :ok
-      last_frame + 1 == frame_number && previous_frame_complete?(frames) -> :ok
+      last_frame.number == frame_number && eligible_for_current_frame?(last_frame, frame_number, value) -> :ok
+      last_frame.number + 1 == frame_number && previous_frame_complete?(last_frame) -> :ok
       true -> {:error, :invalid_frame}
     end
   end

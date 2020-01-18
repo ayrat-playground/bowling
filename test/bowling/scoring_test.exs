@@ -28,5 +28,31 @@ defmodule Bowling.ScoringTest do
                value: 5
              }} = Scoring.insert_new_throw(game_uuid: game.uuid, frame_number: 1, value: 5)
     end
+
+    test "inserts the second throw in the second frame" do
+      game = insert(:game)
+      first_frame = insert(:frame, game: game, number: 1)
+      insert(:throw, frame: first_frame, value: 10, number: 0)
+
+      assert {:ok,
+              %Throw{
+                number: 0,
+                value: 5
+              }} = Scoring.insert_new_throw(game_uuid: game.uuid, frame_number: 2, value: 5)
+    end
+
+    test "can not insert the second frame without the first frame" do
+      game = insert(:game)
+
+      assert {:error, :invalid_frame} = Scoring.insert_new_throw(game_uuid: game.uuid, frame_number: 2, value: 5)
+    end
+
+    test "can not insert the the third frame without the second frame" do
+      game = insert(:game)
+      first_frame = insert(:frame, game: game, number: 1)
+      insert(:throw, frame: first_frame, value: 10, number: 0)
+
+      assert {:error, :invalid_frame} = Scoring.insert_new_throw(game_uuid: game.uuid, frame_number: 3, value: 5)
+    end
   end
 end
