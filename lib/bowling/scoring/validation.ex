@@ -13,28 +13,25 @@ defmodule Bowling.Scoring.Validation do
 
   ## Examples
 
-      iex> Bowling.Scoring.Validation.execute([], 1, 10)
+      iex> Bowling.Scoring.Validation.run([], 1, 10)
       :ok
 
-      iex> Bowling.Scoring.Validation.execute([%{number: 1, throws: [%{number: 0, value: 10}]}], 1, 10)
+      iex> Bowling.Scoring.Validation.run([%{number: 1, throws: [%{number: 0, value: 10}]}], 1, 10)
       {:error, :invalid_frame}
 
-      iex> Bowling.Scoring.Validation.execute([], 200, 10)
+      iex> Bowling.Scoring.Validation.run([], 200, 10)
       {:error, :invalid_frame}
 
-      iex> Bowling.Scoring.Validation.execute([], 1, -200)
+      iex> Bowling.Scoring.Validation.run([], 1, -200)
       {:error, :invalid_frame}
   """
 
-  def execute(_, frame_number, _) when frame_number > 10 or frame_number < 1, do: @error_tuple
+  def run(_, frame_number, _) when frame_number > 10 or frame_number < 1, do: @error_tuple
 
-  def execute(_, _, value) when value > 10 or value < 0, do: @error_tuple
+  def run(_, _, value) when value > 10 or value < 0, do: @error_tuple
 
-  def execute(frames, frame_number, value) do
-    case validate_frame(frames, frame_number, value) do
-      :ok -> :ok
-      error -> error
-    end
+  def run(frames, frame_number, value) do
+    do_validate_frame(frames, frame_number, value)
   end
 
   @doc """
@@ -63,11 +60,11 @@ defmodule Bowling.Scoring.Validation do
     (throw_count == 1 && first_throw.value == 10) || throw_count == 2
   end
 
-  defp validate_frame([], 1, _value), do: :ok
+  defp do_validate_frame([], 1, _value), do: :ok
 
-  defp validate_frame([], _, _value), do: @error_tuple
+  defp do_validate_frame([], _, _value), do: @error_tuple
 
-  defp validate_frame(frames, frame_number, value) do
+  defp do_validate_frame(frames, frame_number, value) do
     last_frame = List.last(frames)
 
     cond do

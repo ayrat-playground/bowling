@@ -41,7 +41,7 @@ defmodule Bowling.Scoring do
   """
   def insert_new_throw(game_uuid: game_uuid, frame_number: frame_number, value: value) do
     with {:ok, game} <- fetch_game(game_uuid),
-         :ok <- Validation.execute(game.frames, frame_number, value) do
+         :ok <- Validation.run(game.frames, frame_number, value) do
       do_insert_throw(game, frame_number, value)
     end
   end

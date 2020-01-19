@@ -6,27 +6,27 @@ defmodule Bowling.Scoring.ValidationTest do
 
   doctest Bowling.Scoring.Validation
 
-  describe "execute/3" do
+  describe "run/3" do
     test "validates the first throw in the second frame" do
       game = Factory.create_full_game_map([{1, [10]}])
 
-      assert :ok = Validation.execute(game.frames, 2, 5)
+      assert :ok = Validation.run(game.frames, 2, 5)
     end
 
     test "can not validate the second frame without the first frame" do
-      assert {:error, :invalid_frame} = Validation.execute([], 2, 5)
+      assert {:error, :invalid_frame} = Validation.run([], 2, 5)
     end
 
     test "can not validate the the third frame without the second frame" do
       game = Factory.create_full_game_map([{1, [10]}])
 
-      assert {:error, :invalid_frame} = Validation.execute(game.frames, 3, 5)
+      assert {:error, :invalid_frame} = Validation.run(game.frames, 3, 5)
     end
 
     test "can not validate the second throw if there is already a strike in this frame" do
       game = Factory.create_full_game_map([{1, [10]}])
 
-      assert {:error, :invalid_frame} = Validation.execute(game.frames, 1, 5)
+      assert {:error, :invalid_frame} = Validation.run(game.frames, 1, 5)
     end
 
     test "can not validate the third throw in the fifth frame" do
@@ -39,7 +39,7 @@ defmodule Bowling.Scoring.ValidationTest do
           {5, [5, 2]}
         ])
 
-      assert {:error, :invalid_frame} = Validation.execute(game.frames, 5, 5)
+      assert {:error, :invalid_frame} = Validation.run(game.frames, 5, 5)
     end
 
     test "can validate three throws in the 10th frame in it's strike" do
@@ -57,7 +57,7 @@ defmodule Bowling.Scoring.ValidationTest do
           {10, [10, 1]}
         ])
 
-      assert :ok = Validation.execute(game.frames, 10, 2)
+      assert :ok = Validation.run(game.frames, 10, 2)
     end
   end
 end
