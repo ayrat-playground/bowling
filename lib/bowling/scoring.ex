@@ -6,7 +6,7 @@ defmodule Bowling.Scoring do
   import Ecto.Query, only: [from: 2]
 
   alias Bowling.Repo
-  alias Bowling.Scoring.{Game, Frame, Throw, Validation}
+  alias Bowling.Scoring.{Calculation, Game, Frame, Throw, Validation}
 
   @doc """
   Creates a new game.
@@ -43,6 +43,29 @@ defmodule Bowling.Scoring do
     with {:ok, game} <- fetch_game(game_uuid),
          :ok <- Validation.run(game.frames, frame_number, value) do
       do_insert_throw(game, frame_number, value)
+    end
+  end
+
+  @doc """
+  Calculates score for each frame for the given `game_uuid`.
+
+  Returns `{:ok, scores_map}` on success, `{:error, :not_found}` if the game is not found.
+
+  ## Examples
+
+      iex> Bowling.Scoring.calculate_score(Ecto.UUID.generate)
+      {:error, :not_found}
+
+      iex> game = insert(:game)
+      iex> Bowling.Scoring.insert_new_throw(game_uuid: game.uuid, frame_number: 1, value: 5)
+      iex> Bowling.Scoring.insert_new_throw(game_uuid: game.uuid, frame_number: 1, value: 2)
+      iex> Bowling.Scoring.calculate_score(game.uuid)
+      {:ok, %{1 => 7}}
+  """
+  def calculate_score(game_uuid) do
+    case fetch_game(game_uuid) do
+      {:ok, game} -> {:ok, Calculation.run(game)}
+      error -> error
     end
   end
 

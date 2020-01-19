@@ -3,6 +3,23 @@ defmodule Bowling.Scoring.Calculation do
   Score calculation logic
   """
 
+  @doc """
+  Calculates all frame scores for the given name. Note, that a game should have its
+  associations preloaded.
+
+  Returns a map with frams scores.
+
+  ### Examples
+
+     iex> game = %{
+     ...>  frames: [
+     ...>     %{number: 1, throws: [%{number: 0, value: 10}]},
+     ...>     %{number: 2, throws: [%{number: 0, value: 5}, %{number: 1, value: 4}]},
+     ...>     %{number: 3, throws: [%{number: 0, value: 2}, %{number: 1, value: 1}]}]}
+     iex> Bowling.Scoring.Calculation.run(game)
+     %{1 => 19, 2 => 28, 3 => 31}
+
+  """
   def run(game) do
     game.frames
     |> raw_frames()
