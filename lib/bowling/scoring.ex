@@ -17,9 +17,11 @@ defmodule Bowling.Scoring do
       :ok
   """
 
-  @spec start_new_game() :: Game.t()
+  @spec start_new_game() :: {:ok, Game.t()}
   def start_new_game do
-    Repo.insert(%Game{})
+    {:ok, game} = Repo.insert(%Game{})
+
+    {:ok, %{game | frames: []}}
   end
 
   @doc """

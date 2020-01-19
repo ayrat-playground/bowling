@@ -6,6 +6,8 @@ defmodule Bowling.Scoring.Throw do
 
   alias Bowling.Scoring.Frame
 
+  @derive {Jason.Encoder, only: [:frame, :value, :number]}
+
   @type t :: %Bowling.Scoring.Throw{
           id: integer(),
           frame_id: integer(),

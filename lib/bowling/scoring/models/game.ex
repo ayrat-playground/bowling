@@ -7,6 +7,8 @@ defmodule Bowling.Scoring.Game do
 
   alias Bowling.Scoring.Frame
 
+  @derive {Jason.Encoder, only: [:uuid, :frames]}
+
   @type t :: %Bowling.Scoring.Game{
           uuid: Ecto.UUID.t(),
           frames: [Frame.t()] | %Ecto.Association.NotLoaded{},
