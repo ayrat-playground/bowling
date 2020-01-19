@@ -9,7 +9,7 @@ defmodule BowlingWeb.Router do
     pipe_through :api
 
     resources("/", GameController, only: [:create]) do
-      get("/score", GameController, :score)
+      get("/score", GameController, :score, as: :score)
     end
   end
 end

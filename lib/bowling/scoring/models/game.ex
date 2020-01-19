@@ -23,3 +23,9 @@ defmodule Bowling.Scoring.Game do
     timestamps()
   end
 end
+
+defimpl Phoenix.Param, for: Bowling.Scoring.Game do
+  def to_param(%{uuid: uuid}) do
+    "#{uuid}"
+  end
+end

@@ -1,0 +1,26 @@
+## This file is a PO Template file.
+##
+## "msgid"s here are often extracted from source code.
+## Add new translations manually only if they're dynamic
+## translations that can't be statically extracted.
+##
+## Run "mix gettext.extract" to bring this file up to
+## date. Leave "msgstr"s empty as changing them here as no
+## effect: edit them in PO (.po) files instead.
+msgid ""
+msgstr ""
+
+#, elixir-format
+#: lib/bowling_web/controllers/api/v1/game_controller.ex:39
+msgid "Provided uuid is not valid"
+msgstr ""
+
+#, elixir-format
+#: lib/bowling_web/controllers/api/v1/game_controller.ex:42
+msgid "The game with specified uuid is not found"
+msgstr ""
+
+#, elixir-format
+#: lib/bowling_web/controllers/api/v1/game_controller.ex:45
+msgid "UUID is not provided"
+msgstr ""

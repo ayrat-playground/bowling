@@ -8,7 +8,7 @@ defmodule Bowling.Scoring.Calculation do
   @type result :: map()
 
   @doc """
-  Calculates all frame scores for the given name. Note, that a game should have its
+  Calculates all frame scores for the given game. Note, that a game should have its
   associations preloaded.
 
   Returns a map with frams scores.

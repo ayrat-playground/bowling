@@ -1,0 +1,27 @@
+## "msgid"s in this file come from POT (.pot) files.
+##
+## Do not add, change, or remove "msgid"s manually here as
+## they're tied to the ones in the corresponding POT file
+## (with the same domain).
+##
+## Use "mix gettext.extract --merge" or "mix gettext.merge"
+## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: en\n"
+"Plural-Forms: nplurals=2\n"
+
+#, elixir-format
+#: lib/bowling_web/controllers/api/v1/game_controller.ex:39
+msgid "Provided uuid is not valid"
+msgstr ""
+
+#, elixir-format
+#: lib/bowling_web/controllers/api/v1/game_controller.ex:42
+msgid "The game with specified uuid is not found"
+msgstr ""
+
+#, elixir-format
+#: lib/bowling_web/controllers/api/v1/game_controller.ex:45
+msgid "UUID is not provided"
+msgstr ""
