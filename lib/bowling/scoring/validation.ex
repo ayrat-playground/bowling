@@ -3,6 +3,8 @@ defmodule Bowling.Scoring.Validation do
   Validation logic
   """
 
+  alias Bowling.Scoring.Frame
+
   @error_tuple {:error, :invalid_frame}
 
   @doc """
@@ -26,6 +28,7 @@ defmodule Bowling.Scoring.Validation do
       {:error, :invalid_frame}
   """
 
+  # spec run([Frame.t(), integer(), integer()]) :: :ok | {:error, :invalid_frame}
   def run(_, frame_number, _) when frame_number > 10 or frame_number < 1, do: @error_tuple
 
   def run(_, _, value) when value > 10 or value < 0, do: @error_tuple
@@ -51,6 +54,7 @@ defmodule Bowling.Scoring.Validation do
       iex> Bowling.Scoring.Validation.frame_complete?(%{throws: [%{value: 10, number: 0}]})
       true
   """
+  @spec frame_complete?(nil | Frame.t()) :: boolean
   def frame_complete?(nil), do: true
 
   def frame_complete?(last_frame) do
@@ -60,6 +64,7 @@ defmodule Bowling.Scoring.Validation do
     (throw_count == 1 && first_throw.value == 10) || throw_count == 2
   end
 
+  @spec do_validate_frame([Frame.t()], integer(), integer()) :: :ok | {:error, :invalid_frame}
   defp do_validate_frame([], 1, _value), do: :ok
 
   defp do_validate_frame([], _, _value), do: @error_tuple
@@ -80,6 +85,7 @@ defmodule Bowling.Scoring.Validation do
     end
   end
 
+  @spec eligible_for_current_frame?(Frame.t(), integer(), integer()) :: boolean()
   defp eligible_for_current_frame?(last_frame, frame_number, value) when frame_number == 10 do
     throw_count = Enum.count(last_frame.throws)
 
@@ -101,6 +107,7 @@ defmodule Bowling.Scoring.Validation do
     Enum.count(last_frame.throws) == 1 && first_throw.value + value <= 10
   end
 
+  @spec third_throw_valid?(Frame.t(), integer()) :: boolean()
   defp third_throw_valid?(last_frame, value) do
     cond do
       Enum.at(last_frame.throws, 0).value == 10 &&

@@ -6,6 +6,16 @@ defmodule Bowling.Scoring.Throw do
 
   alias Bowling.Scoring.Frame
 
+  @type t :: %Bowling.Scoring.Throw{
+          id: integer(),
+          frame_id: integer(),
+          frame: Frame.t() | %Ecto.Association.NotLoaded{},
+          value: integer(),
+          number: integer(),
+          inserted_at: DateTime.t(),
+          updated_at: DateTime.t()
+        }
+
   schema "throws" do
     belongs_to(:frame, Frame, foreign_key: :frame_id, references: :id)
     field(:value, :integer)

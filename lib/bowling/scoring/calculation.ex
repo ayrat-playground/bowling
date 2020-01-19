@@ -3,6 +3,10 @@ defmodule Bowling.Scoring.Calculation do
   Score calculation logic
   """
 
+  alias Bowling.Scoring.{Game, Frame}
+
+  @type result :: map()
+
   @doc """
   Calculates all frame scores for the given name. Note, that a game should have its
   associations preloaded.
@@ -20,12 +24,14 @@ defmodule Bowling.Scoring.Calculation do
      %{1 => 19, 2 => 28, 3 => 31}
 
   """
+  @spec run(Game.t()) :: result()
   def run(game) do
     game.frames
     |> raw_frames()
     |> calculate_frame_scores()
   end
 
+  @spec raw_frames([Frame.t()]) :: [tuple()]
   defp raw_frames(frames) do
     Enum.map(frames, fn %{number: number, throws: throws} ->
       raw_throws = Enum.map(throws, fn %{value: value} -> value end)
@@ -34,12 +40,14 @@ defmodule Bowling.Scoring.Calculation do
     end)
   end
 
+  @spec calculate_frame_scores([tuple()]) :: result()
   defp calculate_frame_scores(frames) do
     frames
     |> Enum.map(fn {number, _throws} -> {number, calculate_frame_score(number, frames)} end)
     |> Enum.into(%{})
   end
 
+  @spec calculate_frame_score(integer(), [tuple()]) :: integer()
   defp calculate_frame_score(frame_number, frames) do
     {current_frames, future_frames} =
       Enum.split_while(frames, fn {number, _} -> number <= frame_number end)
@@ -54,6 +62,7 @@ defmodule Bowling.Scoring.Calculation do
     do_calculate(current_throws, future_throws)
   end
 
+  @spec do_calculate([integer()], [integer()], integer()) :: integer()
   defp do_calculate(current, future, acc \\ 0)
 
   defp do_calculate([10], future, acc) do

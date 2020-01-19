@@ -17,6 +17,7 @@ defmodule Bowling.Scoring do
       :ok
   """
 
+  @spec start_new_game() :: Game.t()
   def start_new_game do
     Repo.insert(%Game{})
   end
@@ -39,6 +40,9 @@ defmodule Bowling.Scoring do
       iex> with  {:ok, %Bowling.Scoring.Throw{number: 0, value: 10}} <- Bowling.Scoring.insert_new_throw(game_uuid: insert(:game).uuid, frame_number: 1, value: 10), do: :ok
       :ok
   """
+
+  @spec insert_new_throw(Keyword.t()) ::
+          {:ok, Throw.t()} | {:error, :not_found} | {:error, :invalid_frame}
   def insert_new_throw(game_uuid: game_uuid, frame_number: frame_number, value: value) do
     with {:ok, game} <- fetch_game(game_uuid),
          :ok <- Validation.run(game.frames, frame_number, value) do
@@ -62,6 +66,8 @@ defmodule Bowling.Scoring do
       iex> Bowling.Scoring.calculate_score(game.uuid)
       {:ok, %{1 => 7}}
   """
+
+  @spec calculate_score(Ecto.UUID.t()) :: {:ok, Calculation.result()} | {:error, :not_found}
   def calculate_score(game_uuid) do
     case fetch_game(game_uuid) do
       {:ok, game} -> {:ok, Calculation.run(game)}
@@ -69,6 +75,7 @@ defmodule Bowling.Scoring do
     end
   end
 
+  @spec do_insert_throw(Game.t(), integer(), integer()) :: {:ok, Throw.t()}
   defp do_insert_throw(game, frame_number, value) do
     last_frame = List.last(game.frames)
 
@@ -84,6 +91,7 @@ defmodule Bowling.Scoring do
     end
   end
 
+  @spec create_new_frame!(Game.t(), integer()) :: Frame.t()
   defp create_new_frame!(game, frame_number) do
     frame_changeset = Frame.changeset(%Frame{}, %{game_uuid: game.uuid, number: frame_number})
 
@@ -91,6 +99,7 @@ defmodule Bowling.Scoring do
     %{result | throws: []}
   end
 
+  @spec create_new_frame!(Frame.t(), integer()) :: Throw.t()
   defp create_new_throw!(frame, value) do
     last_throw = List.last(frame.throws)
     throw_number = (last_throw && last_throw.number + 1) || 0
@@ -101,6 +110,7 @@ defmodule Bowling.Scoring do
     Repo.insert!(throw_changeset)
   end
 
+  @spec fetch_game(Ecto.UUID.t()) :: {:ok, Game.t()} | {:error, :not_found}
   defp fetch_game(game_uuid) do
     throw_query = from(t in Throw, order_by: [asc: :number])
     frame_query = from(f in Frame, order_by: [asc: :number], preload: [throws: ^throw_query])

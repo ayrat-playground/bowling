@@ -7,6 +7,13 @@ defmodule Bowling.Scoring.Game do
 
   alias Bowling.Scoring.Frame
 
+  @type t :: %Bowling.Scoring.Game{
+          uuid: Ecto.UUID.t(),
+          frames: [Frame.t()] | %Ecto.Association.NotLoaded{},
+          inserted_at: DateTime.t(),
+          updated_at: DateTime.t()
+        }
+
   @primary_key {:uuid, :binary_id, autogenerate: true}
   schema "games" do
     has_many(:frames, Frame, foreign_key: :game_uuid)
