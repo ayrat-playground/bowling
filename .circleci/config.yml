@@ -13,6 +13,7 @@ jobs:
 
     working_directory: ~/app
 
+    steps:
       - run: mix local.hex --force
       - run: mix local.rebar --force
 
