@@ -3,6 +3,22 @@ defmodule Bowling.Factory do
 
   alias Bowling.Scoring.{Frame, Game, Throw}
 
+  def create_full_game_map(frames) do
+    formatted_frames =
+      Enum.map(frames, fn {frame_number, throws} ->
+        throws_map =
+          throws
+          |> Enum.with_index()
+          |> Enum.map(fn {value, index} ->
+            %{number: index, value: value}
+          end)
+
+        %{number: frame_number, throws: throws_map}
+      end)
+
+    %{frames: formatted_frames}
+  end
+
   def game_factory do
     %Game{}
   end

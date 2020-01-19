@@ -34,6 +34,7 @@ defmodule Bowling.MixProject do
   defp deps do
     [
       {:ex_machina, "~> 2.3", only: :test},
+      {:credo, "~> 1.1.0", only: [:dev, :test], runtime: false},
       {:phoenix, "~> 1.4.11"},
       {:phoenix_pubsub, "~> 1.1"},
       {:phoenix_ecto, "~> 4.0"},
