@@ -8,26 +8,48 @@ defmodule Bowling.Scoring do
   alias Bowling.Repo
   alias Bowling.Scoring.{Game, Frame, Throw, Validation}
 
+  @doc """
+  Creates a new game.
+
+  ## Examples
+
+      iex> with {:ok, %Bowling.Scoring.Game{}} <- Bowling.Scoring.start_new_game(), do: :ok
+      :ok
+  """
+
   def start_new_game do
     Repo.insert(%Game{})
   end
 
+  @doc """
+  Validates and insertes the give throw `value` for the specified `frame_number` for the
+  given `game_uuid`.
+
+  Returns created throw on success.
+  If the game can not be found returns `{:error, :not_found}`. If throw is not valid, returns {:error, :invalid_frame}
+
+  ## Examples
+
+      iex> Bowling.Scoring.insert_new_throw(game_uuid: Ecto.UUID.generate, frame_number: 1, value: 10)
+      {:error, :not_found}
+
+      iex> Bowling.Scoring.insert_new_throw(game_uuid: insert(:game).uuid, frame_number: 10, value: 10)
+      {:error, :invalid_frame}
+
+      iex> with  {:ok, %Bowling.Scoring.Throw{number: 0, value: 10}} <- Bowling.Scoring.insert_new_throw(game_uuid: insert(:game).uuid, frame_number: 1, value: 10), do: :ok
+      :ok
+  """
   def insert_new_throw(game_uuid: game_uuid, frame_number: frame_number, value: value) do
     with {:ok, game} <- fetch_game(game_uuid),
          :ok <- Validation.execute(game.frames, frame_number, value) do
-      thrw = do_insert_throw(game, frame_number, value)
-
-      thrw
-    else
-      {:error, :not_found} -> {:error, :not_found}
-      {:error, :invalid_frame} -> {:error, :invalid_frame}
+      do_insert_throw(game, frame_number, value)
     end
   end
 
   defp do_insert_throw(game, frame_number, value) do
     last_frame = List.last(game.frames)
 
-    if Validation.previous_frame_complete?(last_frame) do
+    if Validation.frame_complete?(last_frame) do
       Repo.transaction(fn ->
         frame = create_new_frame!(game, frame_number)
         create_new_throw!(frame, value)

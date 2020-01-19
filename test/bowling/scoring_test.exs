@@ -6,6 +6,8 @@ defmodule Bowling.ScoringTest do
   alias Bowling.Scoring
   alias Bowling.Scoring.{Game, Throw}
 
+  doctest Bowling.Scoring
+
   setup do
     game = insert(:game)
 

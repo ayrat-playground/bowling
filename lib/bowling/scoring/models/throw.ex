@@ -1,4 +1,7 @@
 defmodule Bowling.Scoring.Throw do
+  @moduledoc """
+  Represent a throw in a bowling game.
+  """
   use Bowling.Schema
 
   alias Bowling.Scoring.Frame

@@ -1,4 +1,7 @@
 defmodule Bowling.Factory do
+  @moduledoc """
+  Factory for test data
+  """
   use ExMachina.Ecto, repo: Bowling.Repo
 
   alias Bowling.Scoring.{Frame, Game, Throw}
