@@ -3,7 +3,7 @@ jobs:
   build:
     docker:
       # Ensure .tool-versions matches
-      - image: circleci/elixir:1.9.1-otp-22
+      - image: circleci/elixir:1.9.1
         environment:
           MIX_ENV: test
           # match POSTGRES_PASSWORD for postgres image below
