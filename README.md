@@ -1,4 +1,4 @@
-# Bowling
+# Bowling [![CircleCI](https://circleci.com/gh/ayrat-playground/bowling.svg?style=svg)](https://circleci.com/gh/ayrat-playground/bowling)
 
 To start your Phoenix server:
 
