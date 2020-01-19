@@ -8,8 +8,12 @@ defmodule BowlingWeb.Router do
   scope "/api", BowlingWeb.API.V1, as: :api_v1 do
     pipe_through :api
 
-    resources("/", GameController, only: [:create]) do
+    resources("/games", GameController, only: [:create]) do
       get("/score", GameController, :score, as: :score)
+
+      resources("/frames", FrameController, only: []) do
+        resources("/throws", ThrowController, only: [:create])
+      end
     end
   end
 end

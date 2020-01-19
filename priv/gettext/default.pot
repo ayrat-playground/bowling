@@ -11,16 +11,31 @@ msgid ""
 msgstr ""
 
 #, elixir-format
-#: lib/bowling_web/controllers/api/v1/game_controller.ex:39
+#: lib/bowling_web/error_handler.ex:10
 msgid "Provided uuid is not valid"
 msgstr ""
 
 #, elixir-format
-#: lib/bowling_web/controllers/api/v1/game_controller.ex:42
+#: lib/bowling_web/error_handler.ex:13
 msgid "The game with specified uuid is not found"
 msgstr ""
 
 #, elixir-format
-#: lib/bowling_web/controllers/api/v1/game_controller.ex:45
+#: lib/bowling_web/error_handler.ex:16
 msgid "UUID is not provided"
+msgstr ""
+
+#, elixir-format
+#: lib/bowling_web/error_handler.ex:19
+msgid "Frame is not valid. It doesn't satisfy game logic"
+msgstr ""
+
+#, elixir-format
+#: lib/bowling_web/error_handler.ex:25
+msgid "Type of Value or frame is not valid"
+msgstr ""
+
+#, elixir-format
+#: lib/bowling_web/error_handler.ex:22
+msgid "Value is not provided"
 msgstr ""

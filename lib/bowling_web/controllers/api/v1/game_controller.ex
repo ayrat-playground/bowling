@@ -1,7 +1,7 @@
 defmodule BowlingWeb.API.V1.GameController do
   use BowlingWeb, :controller
 
-  import BowlingWeb.Gettext
+  import BowlingWeb.ErrorHandler
 
   alias Bowling.Scoring
   alias Ecto.UUID
@@ -30,21 +30,5 @@ defmodule BowlingWeb.API.V1.GameController do
       :error -> {:error, :invalid_uuid}
       {:ok, uuid} -> {:ok, uuid}
     end
-  end
-
-  defp send_error(conn, error) do
-    {code, message} =
-      case error do
-        {:error, :invalid_uuid} ->
-          {:bad_request, gettext("Provided uuid is not valid")}
-
-        {:error, :not_found} ->
-          {:not_found, gettext("The game with specified uuid is not found")}
-
-        {:error, :no_uuid} ->
-          {:bad_request, gettext("UUID is not provided")}
-      end
-
-    send_resp(conn, code, Jason.encode!(%{error: message}))
   end
 end
