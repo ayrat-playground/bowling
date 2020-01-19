@@ -10,10 +10,18 @@ jobs:
           PGPASSWORD: postgres
           # match POSTGRES_USER for postgres image below
           PGUSER: postgres
+      - image: circleci/postgres:10.3-alpine
+        environment:
+          POSTGRES_DB: bowling_test
+          # match PGPASSWORD for elixir image above
+          POSTGRES_PASSWORD: postgres
+          # match PGUSER for elixir image above
+          POSTGRES_USER: postgres
 
-    working_directory: ~/app
+    working_directory: ~/bowling
 
     steps:
+      - checkout
       - run: mix local.hex --force
       - run: mix local.rebar --force
 
