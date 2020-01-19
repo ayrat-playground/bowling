@@ -42,7 +42,7 @@ defmodule Bowling.Scoring.ValidationTest do
       assert {:error, :invalid_frame} = Validation.run(game.frames, 5, 5)
     end
 
-    test "can validate three throws in the 10th frame in it's strike" do
+    test "can validate three throws in the 10th frame if it's strike" do
       game =
         Factory.create_full_game_map([
           {1, [10]},

@@ -1,0 +1,58 @@
+version: 2
+jobs:
+  build:
+    docker:
+      # Ensure .tool-versions matches
+      - image: circleci/elixir:1.9.1-otp-22
+        environment:
+          MIX_ENV: test
+          # match POSTGRES_PASSWORD for postgres image below
+          PGPASSWORD: postgres
+          # match POSTGRES_USER for postgres image below
+          PGUSER: postgres
+
+    working_directory: ~/app
+
+      - run: mix local.hex --force
+      - run: mix local.rebar --force
+
+      - run:
+          name: "ELIXIR_VERSION.lock"
+          command: echo "${ELIXIR_VERSION}" > ELIXIR_VERSION.lock
+      - run:
+          name: "OTP_VERSION.lock"
+          command: echo "${OTP_VERSION}" > OTP_VERSION.lock
+
+      - restore_cache:
+          keys:
+             - v1-mix-compile-{{ checksum "OTP_VERSION.lock" }}-{{ checksum "ELIXIR_VERSION.lock" }}-{{ checksum "mix.lock" }}
+             - v1-mix-compile-{{ checksum "OTP_VERSION.lock" }}-{{ checksum "ELIXIR_VERSION.lock" }}-{{ checksum "mix.exs" }}
+             - v1-mix-compile-{{ checksum "OTP_VERSION.lock" }}-{{ checksum "ELIXIR_VERSION.lock" }}
+
+      - run: mix deps.get
+
+      - run: mix compile
+
+      # `deps` needs to be cached with `_build` because `_build` will symlink into `deps`
+
+      - save_cache:
+          key: v1-mix-compile-{{ checksum "OTP_VERSION.lock" }}-{{ checksum "ELIXIR_VERSION.lock" }}-{{ checksum "mix.lock" }}
+          paths:
+            - deps
+            - _build
+      - save_cache:
+          key: v1-mix-compile-{{ checksum "OTP_VERSION.lock" }}-{{ checksum "ELIXIR_VERSION.lock" }}-{{ checksum "mix.exs" }}
+          paths:
+            - deps
+            - _build
+      - save_cache:
+          key: v1-mix-compile-{{ checksum "OTP_VERSION.lock" }}-{{ checksum "ELIXIR_VERSION.lock" }}
+          paths:
+            - deps
+            - _build
+
+      - run: mix format --check-formatted
+
+      - run: mix credo
+
+      - run: mix test

@@ -1,4 +1,8 @@
 defmodule BowlingWeb.ErrorHandler do
+  @moduledoc """
+  Common error handling helpers.
+  """
+
   import BowlingWeb.Gettext
 
   alias Plug.Conn
