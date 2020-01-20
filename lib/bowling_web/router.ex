@@ -5,7 +5,7 @@ defmodule BowlingWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/api", BowlingWeb.API.V1, as: :api_v1 do
+  scope "/api/v1", BowlingWeb.API.V1, as: :api_v1 do
     pipe_through :api
 
     resources("/games", GameController, only: [:create]) do

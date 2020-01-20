@@ -89,7 +89,7 @@ defmodule Bowling.Scoring do
     else
       frame = List.last(game.frames)
 
-      create_new_throw!(frame, value)
+      {:ok, create_new_throw!(frame, value)}
     end
   end
 
